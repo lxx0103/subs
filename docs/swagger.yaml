@@ -1,0 +1,401 @@
+basePath: /
+definitions:
+  auth.WxSigninRequest:
+    properties:
+      code:
+        type: string
+    required:
+    - code
+    type: object
+  auth.WxSigninResponse:
+    properties:
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/auth.WxUserResponse'
+    type: object
+  auth.WxUserResponse:
+    properties:
+      avatar:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      open_id:
+        type: string
+      status:
+        type: integer
+    type: object
+  response.ErrorRes:
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+    type: object
+  response.ListRes:
+    properties:
+      count:
+        type: integer
+      data: {}
+      page_id:
+        type: integer
+      page_size:
+        type: integer
+    type: object
+  response.SuccessRes:
+    properties:
+      data: {}
+    type: object
+  setting.CatResponse:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      status:
+        type: integer
+    type: object
+  subscription.SubscriptionNew:
+    properties:
+      alert_before:
+        maximum: 30
+        type: integer
+      cat_id:
+        type: integer
+      driver:
+        maxLength: 128
+        type: string
+      driver_contact:
+        maxLength: 128
+        type: string
+      driver_contact_type_id:
+        type: integer
+      need_alert:
+        enum:
+        - 1
+        - 2
+        type: integer
+      pay_type_id:
+        maximum: 128
+        type: integer
+      payment_amount:
+        maximum: 128
+        type: number
+      source_id:
+        type: integer
+      sub_cat_id:
+        type: integer
+      sub_end_date:
+        maxLength: 128
+        type: string
+      sub_start_date:
+        maxLength: 128
+        type: string
+      sub_type_id:
+        type: integer
+    required:
+    - cat_id
+    - need_alert
+    - source_id
+    - sub_cat_id
+    - sub_end_date
+    - sub_start_date
+    - sub_type_id
+    type: object
+  subscription.SubscriptionResponse:
+    properties:
+      alert_before:
+        type: integer
+      cat_id:
+        type: integer
+      cat_name:
+        type: string
+      driver:
+        type: string
+      driver_contact:
+        type: string
+      driver_contact_type_id:
+        type: integer
+      driver_contact_type_name:
+        type: string
+      id:
+        type: integer
+      need_alert:
+        type: integer
+      pay_type_id:
+        type: integer
+      pay_type_name:
+        type: string
+      payment_amount:
+        type: number
+      source_id:
+        type: integer
+      source_name:
+        type: string
+      sub_cat_id:
+        type: integer
+      sub_cat_name:
+        type: string
+      sub_end_date:
+        type: string
+      sub_start_date:
+        type: string
+      sub_type_id:
+        type: integer
+      sub_type_name:
+        type: string
+    type: object
+  subscription.SubscriptionUpdate:
+    properties:
+      alert_before:
+        maximum: 30
+        type: integer
+      cat_id:
+        type: integer
+      driver:
+        maxLength: 128
+        type: string
+      driver_contact:
+        maxLength: 128
+        type: string
+      driver_contact_type_id:
+        type: integer
+      need_alert:
+        enum:
+        - 1
+        - 2
+        type: integer
+      pay_type_id:
+        maximum: 128
+        type: integer
+      payment_amount:
+        maximum: 128
+        type: number
+      source_id:
+        type: integer
+      sub_cat_id:
+        type: integer
+      sub_end_date:
+        maxLength: 128
+        type: string
+      sub_start_date:
+        maxLength: 128
+        type: string
+      sub_type_id:
+        type: integer
+    type: object
+host: 0.0.0.0:8080
+info:
+  contact:
+    email: lxx0103@yahoo.com
+    name: Lewis
+  description: API for subs.
+  title: subs API
+  version: "1.0"
+paths:
+  /cats:
+    get:
+      consumes:
+      - application/json
+      operationId: "301"
+      parameters:
+      - description: 页码
+        in: query
+        name: page_id
+        required: true
+        type: integer
+      - description: 每页行数（5/10/15/20）
+        in: query
+        name: page_size
+        required: true
+        type: integer
+      - description: 类别名称
+        in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ListRes'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/setting.CatResponse'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorRes'
+      summary: 类别列表
+      tags:
+      - 类别管理
+  /subscriptions:
+    get:
+      consumes:
+      - application/json
+      operationId: "202"
+      parameters:
+      - description: 页码
+        in: query
+        name: page_id
+        required: true
+        type: integer
+      - description: 每页行数
+        in: query
+        name: page_size
+        required: true
+        type: integer
+      - description: 学生ID
+        in: query
+        name: cat_id
+        type: integer
+      - description: 员工ID
+        in: query
+        name: sub_cat_id
+        type: integer
+      - description: 学生姓名
+        in: query
+        name: sub_type_id
+        type: integer
+      - description: 员工姓名
+        in: query
+        name: source_id
+        type: integer
+      - description: 扫码时间开始
+        in: query
+        name: driver
+        type: string
+      - description: 扫码时间结束
+        in: query
+        name: pay_type_id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ListRes'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/subscription.SubscriptionResponse'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorRes'
+      summary: 订阅列表
+      tags:
+      - 订阅管理
+    post:
+      consumes:
+      - application/json
+      operationId: "201"
+      parameters:
+      - description: 组织信息
+        in: body
+        name: subscription
+        required: true
+        schema:
+          $ref: '#/definitions/subscription.SubscriptionNew'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessRes'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorRes'
+      summary: 新建订阅
+      tags:
+      - 订阅管理
+  /subscriptions/:id:
+    put:
+      consumes:
+      - application/json
+      operationId: "203"
+      parameters:
+      - description: 订阅ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 订阅信息
+        in: body
+        name: subscription_info
+        required: true
+        schema:
+          $ref: '#/definitions/subscription.SubscriptionUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessRes'
+            - properties:
+                data:
+                  type: string
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorRes'
+      summary: 根据ID更新订阅
+      tags:
+      - 订阅管理
+  /wx/signin:
+    post:
+      consumes:
+      - application/json
+      operationId: "006"
+      parameters:
+      - description: 登录类型
+        in: body
+        name: signin_info
+        required: true
+        schema:
+          $ref: '#/definitions/auth.WxSigninRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessRes'
+            - properties:
+                data:
+                  $ref: '#/definitions/auth.WxSigninResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorRes'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/response.ErrorRes'
+      summary: 小程序登录
+      tags:
+      - 小程序管理
+swagger: "2.0"

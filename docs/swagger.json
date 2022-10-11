@@ -1,0 +1,619 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API for subs.",
+        "title": "subs API",
+        "contact": {
+            "name": "Lewis",
+            "email": "lxx0103@yahoo.com"
+        },
+        "version": "1.0"
+    },
+    "host": "0.0.0.0:8080",
+    "basePath": "/",
+    "paths": {
+        "/cats": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "类别管理"
+                ],
+                "summary": "类别列表",
+                "operationId": "301",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页行数（5/10/15/20）",
+                        "name": "page_size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "类别名称",
+                        "name": "name",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.ListRes"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/setting.CatResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorRes"
+                        }
+                    }
+                }
+            }
+        },
+        "/subscriptions": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "订阅管理"
+                ],
+                "summary": "订阅列表",
+                "operationId": "202",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页行数",
+                        "name": "page_size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "学生ID",
+                        "name": "cat_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "员工ID",
+                        "name": "sub_cat_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "学生姓名",
+                        "name": "sub_type_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "员工姓名",
+                        "name": "source_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "扫码时间开始",
+                        "name": "driver",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "扫码时间结束",
+                        "name": "pay_type_id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.ListRes"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/subscription.SubscriptionResponse"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorRes"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "订阅管理"
+                ],
+                "summary": "新建订阅",
+                "operationId": "201",
+                "parameters": [
+                    {
+                        "description": "组织信息",
+                        "name": "subscription",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/subscription.SubscriptionNew"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessRes"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorRes"
+                        }
+                    }
+                }
+            }
+        },
+        "/subscriptions/:id": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "订阅管理"
+                ],
+                "summary": "根据ID更新订阅",
+                "operationId": "203",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "订阅ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "订阅信息",
+                        "name": "subscription_info",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/subscription.SubscriptionUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessRes"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorRes"
+                        }
+                    }
+                }
+            }
+        },
+        "/wx/signin": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "小程序管理"
+                ],
+                "summary": "小程序登录",
+                "operationId": "006",
+                "parameters": [
+                    {
+                        "description": "登录类型",
+                        "name": "signin_info",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.WxSigninRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.SuccessRes"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/auth.WxSigninResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorRes"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/response.ErrorRes"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "auth.WxSigninRequest": {
+            "type": "object",
+            "required": [
+                "code"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.WxSigninResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/auth.WxUserResponse"
+                }
+            }
+        },
+        "auth.WxUserResponse": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "open_id": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "response.ErrorRes": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.ListRes": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "data": {},
+                "page_id": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
+                }
+            }
+        },
+        "response.SuccessRes": {
+            "type": "object",
+            "properties": {
+                "data": {}
+            }
+        },
+        "setting.CatResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "subscription.SubscriptionNew": {
+            "type": "object",
+            "required": [
+                "cat_id",
+                "need_alert",
+                "source_id",
+                "sub_cat_id",
+                "sub_end_date",
+                "sub_start_date",
+                "sub_type_id"
+            ],
+            "properties": {
+                "alert_before": {
+                    "type": "integer",
+                    "maximum": 30
+                },
+                "cat_id": {
+                    "type": "integer"
+                },
+                "driver": {
+                    "type": "string",
+                    "maxLength": 128
+                },
+                "driver_contact": {
+                    "type": "string",
+                    "maxLength": 128
+                },
+                "driver_contact_type_id": {
+                    "type": "integer"
+                },
+                "need_alert": {
+                    "type": "integer",
+                    "enum": [
+                        1,
+                        2
+                    ]
+                },
+                "pay_type_id": {
+                    "type": "integer",
+                    "maximum": 128
+                },
+                "payment_amount": {
+                    "type": "number",
+                    "maximum": 128
+                },
+                "source_id": {
+                    "type": "integer"
+                },
+                "sub_cat_id": {
+                    "type": "integer"
+                },
+                "sub_end_date": {
+                    "type": "string",
+                    "maxLength": 128
+                },
+                "sub_start_date": {
+                    "type": "string",
+                    "maxLength": 128
+                },
+                "sub_type_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "subscription.SubscriptionResponse": {
+            "type": "object",
+            "properties": {
+                "alert_before": {
+                    "type": "integer"
+                },
+                "cat_id": {
+                    "type": "integer"
+                },
+                "cat_name": {
+                    "type": "string"
+                },
+                "driver": {
+                    "type": "string"
+                },
+                "driver_contact": {
+                    "type": "string"
+                },
+                "driver_contact_type_id": {
+                    "type": "integer"
+                },
+                "driver_contact_type_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "need_alert": {
+                    "type": "integer"
+                },
+                "pay_type_id": {
+                    "type": "integer"
+                },
+                "pay_type_name": {
+                    "type": "string"
+                },
+                "payment_amount": {
+                    "type": "number"
+                },
+                "source_id": {
+                    "type": "integer"
+                },
+                "source_name": {
+                    "type": "string"
+                },
+                "sub_cat_id": {
+                    "type": "integer"
+                },
+                "sub_cat_name": {
+                    "type": "string"
+                },
+                "sub_end_date": {
+                    "type": "string"
+                },
+                "sub_start_date": {
+                    "type": "string"
+                },
+                "sub_type_id": {
+                    "type": "integer"
+                },
+                "sub_type_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "subscription.SubscriptionUpdate": {
+            "type": "object",
+            "properties": {
+                "alert_before": {
+                    "type": "integer",
+                    "maximum": 30
+                },
+                "cat_id": {
+                    "type": "integer"
+                },
+                "driver": {
+                    "type": "string",
+                    "maxLength": 128
+                },
+                "driver_contact": {
+                    "type": "string",
+                    "maxLength": 128
+                },
+                "driver_contact_type_id": {
+                    "type": "integer"
+                },
+                "need_alert": {
+                    "type": "integer",
+                    "enum": [
+                        1,
+                        2
+                    ]
+                },
+                "pay_type_id": {
+                    "type": "integer",
+                    "maximum": 128
+                },
+                "payment_amount": {
+                    "type": "number",
+                    "maximum": 128
+                },
+                "source_id": {
+                    "type": "integer"
+                },
+                "sub_cat_id": {
+                    "type": "integer"
+                },
+                "sub_end_date": {
+                    "type": "string",
+                    "maxLength": 128
+                },
+                "sub_start_date": {
+                    "type": "string",
+                    "maxLength": 128
+                },
+                "sub_type_id": {
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}
